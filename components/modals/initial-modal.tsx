@@ -66,7 +66,7 @@ export const InitialModal = () => {
 
   return (
     <Dialog open>
-      <DialogContent className="sm:max-w-[500px] inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white text-black p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-125 inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] overflow-y-auto bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
             Customize your server
