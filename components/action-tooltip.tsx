@@ -9,7 +9,7 @@ import {
 
 interface ActionTooltipProps {
   label: string;
-  children: React.ReactNode;
+  children: React.ReactElement;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
 }
@@ -23,9 +23,7 @@ export const ActionTooltip = ({
   return (
     <TooltipProvider delay={50}>
       <Tooltip>
-        <TooltipTrigger>
-          {children}
-        </TooltipTrigger>
+        <TooltipTrigger render={children} />
         <TooltipContent side={side} align={align}>
           <p className="font-semibold text-sm capitalize">
             {label.toLowerCase()}

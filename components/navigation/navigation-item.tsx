@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { ActionTooltip } from "@/components/action-tooltip";
-import { use } from "react";
 
 interface NavigationItemProps {
   id: string;
@@ -38,7 +37,7 @@ export const NavigationItem = ({
         <div className={cn(
           "absolute left-0 bg-primary rounded-r-full transition-all w-1",
           params?.serverId !== id && "group-hover:h-5",
-          params?.serverId === id ? "h=[36px]" : "h-2"
+          params?.serverId === id ? "h-[36px]" : "h-2"
         )} />
         <div className={cn(
           "relative group flex mx-3 h-12 w-12 rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden",

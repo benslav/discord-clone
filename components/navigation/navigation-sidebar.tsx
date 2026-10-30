@@ -49,7 +49,7 @@ export const NavigationSidebar = async () => {
         <UserButton 
           appearance={{
             elements: {
-              avatarBox: "h-12! w-12!",
+              avatarBox: "h-12 w-12",
             },
           }}
         />
