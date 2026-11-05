@@ -64,7 +64,7 @@ export const ChatInput = ({
               <button
                 type="button"
                 onClick={() => {}}
-                className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
+                className="absolute top-7 left-8 h-6 w-6 bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
               >
                 <Plus className="text-white dark:text-[#313338]" />
               </button>
