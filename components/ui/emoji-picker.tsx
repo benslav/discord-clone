@@ -64,9 +64,9 @@ export const EmojiPicker = React.forwardRef<HTMLElement, EmojiPickerProps>(
         ref={ref}
         components={components}
         className={cx(
-          'h-[368px] w-[324px] max-w-full bg-popover text-popover-foreground',
+          'h-92 w-81 max-w-full bg-popover text-popover-foreground',
           // The skin-tone variations menu floats over the grid.
-          '[&_[data-epr-part=variation-picker]]:rounded-md [&_[data-epr-part=variation-picker]]:border [&_[data-epr-part=variation-picker]]:border-border [&_[data-epr-part=variation-picker]]:bg-popover [&_[data-epr-part=variation-picker]]:shadow-md',
+          '**:data-[epr-part=variation-picker]:rounded-md **:data-[epr-part=variation-picker]:border **:data-[epr-part=variation-picker]:border-border **:data-[epr-part=variation-picker]:bg-popover **:data-[epr-part=variation-picker]:shadow-md',
           className,
         )}
         style={{ ...sizes, ...style }}
@@ -75,10 +75,10 @@ export const EmojiPicker = React.forwardRef<HTMLElement, EmojiPickerProps>(
         <Picker.Panel className="min-h-0 gap-2">
           <div className="flex items-center gap-2 px-2 pt-2">
             <Picker.SearchInput className="h-9 min-w-0 flex-1 rounded-md border border-input bg-transparent px-3 text-sm text-popover-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring" />
-            <Picker.SkinTone />
+            <Picker.SkinTone className="-translate-x-2" />
           </div>
           <Picker.CategoryNav className="border-b border-input px-1" />
-          <Picker.Viewport className="min-h-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Picker.Viewport className="min-h-0 scrollbar-none [&::-webkit-scrollbar]:hidden">
             <Picker.List />
             <Picker.Empty className="p-6 text-center text-sm text-muted-foreground" />
             <Picker.Loading className="p-6 text-center text-sm text-muted-foreground" />
