@@ -100,6 +100,7 @@ model Message {
   content String @db.Text
 
   fileUrl String? @db.Text
+  fileType String?
 
   memberId String
   member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
@@ -137,6 +138,7 @@ model DirectMessage {
   id String @id @default(uuid())
   content String @db.Text
   fileUrl String? @db.Text
+  fileType String?
 
   memberId String
   member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)

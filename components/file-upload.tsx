@@ -7,15 +7,16 @@ import { UploadDropzone } from "@/lib/uploadthing";
 import { FileIcon, X } from "lucide-react";
 
 interface FileUploadProps {
-  onChange: (url?: string) => void;
+  onChange: (url?: string, fileType?: string) => void;
   value: string;
+  fileType?: string;
   endpoint: "messageFile" | "serverImage";
 }
 
-export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
-  const fileType = value?.split(".").pop();
+export const FileUpload = ({ onChange, value, fileType, endpoint }: FileUploadProps) => {
+  const currentFileType = fileType ?? value?.split(/[?#]/)[0].split(".").pop()?.toLowerCase();
 
-  if (value && fileType !== "pdf") {
+  if (value && currentFileType !== "pdf") {
     return (
       <div className="relative size-20">
         <Image fill src={value} alt="Upload" className="rounded-full" />
@@ -30,15 +31,15 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
     );
   }
 
-  if (value && fileType === "pdf") {
+  if (value && currentFileType === "pdf") {
     return (
-      <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
-        <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400"/>
+      <div className="relative mt-2 flex w-full min-w-0 max-w-full items-center rounded-md bg-background/10 p-2">
+        <FileIcon className="h-10 w-10 shrink-0 fill-indigo-200 stroke-indigo-400"/>
         <a 
           href={value}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
+          className="ml-2 min-w-0 flex-1 break-all text-left text-sm text-indigo-500 hover:underline dark:text-indigo-400"
         >
           {value}
         </a>
@@ -63,7 +64,8 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
           return;
         }
 
-        onChange(uploadedFile.ufsUrl || uploadedFile.url);
+        const fileType = uploadedFile.name.split(".").pop()?.toLowerCase();
+        onChange(uploadedFile.ufsUrl || uploadedFile.url, fileType);
       }}
       onUploadError={(error: Error) => {
         console.error("File upload failed:", error);

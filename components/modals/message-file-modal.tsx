@@ -4,7 +4,7 @@ import axios from "axios";
 import qs from "query-string";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -23,6 +23,9 @@ const formSchema = z.object({
   fileUrl: z.string().min(1, {
     message: "Attachment is required.",
   }),
+  fileType: z.string().min(1, {
+    message: "File type is required.",
+  }),
 });
 
 export const MessageFileModal = () => {
@@ -36,6 +39,7 @@ export const MessageFileModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       fileUrl: "",
+      fileType: "",
     },
   });
 
@@ -45,6 +49,10 @@ export const MessageFileModal = () => {
   }
 
   const isLoading = form.formState.isSubmitting;
+  const selectedFileType = useWatch({
+    control: form.control,
+    name: "fileType",
+  });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -87,7 +95,11 @@ export const MessageFileModal = () => {
                   <FileUpload
                     endpoint="messageFile"
                     value={field.value}
-                    onChange={field.onChange}
+                    fileType={selectedFileType}
+                    onChange={(url, fileType) => {
+                      field.onChange(url);
+                      form.setValue("fileType", fileType || "");
+                    }}
                   />
                 )}
               />
