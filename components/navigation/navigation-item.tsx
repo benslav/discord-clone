@@ -45,6 +45,7 @@ export const NavigationItem = ({
         )}>
           <Image 
             fill
+            sizes="random"
             src={imageUrl}
             alt="Channel"
           />
