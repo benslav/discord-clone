@@ -1,10 +1,9 @@
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { Message } from "@prisma/client";
-import { channel } from "diagnostics_channel";
 import { NextResponse } from "next/server";
 
-const MESSAGES_BATCH = 10;
+const DEFAULT_MESSAGES_BATCH = 10;
+const MAX_MESSAGES_BATCH = 100;
 
 export async function GET(
   req: Request
@@ -15,6 +14,10 @@ export async function GET(
 
     const cursor = searchParams.get("cursor");
     const channelId = searchParams.get("channelId");
+    const requestedBatchSize = searchParams.get("limit");
+    const batchSize = requestedBatchSize === null
+      ? DEFAULT_MESSAGES_BATCH
+      : Number(requestedBatchSize);
 
     if (!profile) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -24,56 +27,38 @@ export async function GET(
       return new NextResponse("Channel ID missing", { status: 400 });
     }
 
-    let messages: Message[] = [];
+    if (!Number.isInteger(batchSize) || batchSize < 1 || batchSize > MAX_MESSAGES_BATCH) {
+      return new NextResponse("Invalid message limit", { status: 400 });
+    }
 
-    if (cursor) {
-      messages = await db.message.findMany({
-        take: MESSAGES_BATCH,
+    const messages = await db.message.findMany({
+      take: batchSize + 1,
+      ...(cursor && {
         skip: 1,
-        cursor: {
-          id: cursor,
-        },
-        where: {
-          channelId: channelId,
-        },
-        include: {
-          member: {
-            include: {
-              profile: true,
-            }
+        cursor: { id: cursor },
+      }),
+      where: {
+        channelId,
+      },
+      include: {
+        member: {
+          include: {
+            profile: true,
           }
-        },
-        orderBy: {
-          createdAt: "asc",
         }
-      })
-    } else {
-      messages = await db.message.findMany({
-        take: MESSAGES_BATCH,
-        where: {
-          channelId,
-        },
-        include: {
-          member: {
-            include: {
-              profile: true,
-            }
-          }
-        },
-        orderBy: {
-          createdAt: "asc",
-        }
-      });
-    }
+      },
+      orderBy: [
+        { createdAt: "desc" },
+        { id: "desc" },
+      ],
+    });
 
-    let nextCursor = null;
-
-    if (messages.length === MESSAGES_BATCH) {
-      nextCursor = messages[MESSAGES_BATCH - 1].id;
-    }
+    const hasMore = messages.length > batchSize;
+    const items = messages.slice(0, batchSize).reverse();
+    const nextCursor = hasMore ? items[0]?.id ?? null : null;
 
     return NextResponse.json({
-      items: messages,
+      items,
       nextCursor
     });
   } catch (error) {
