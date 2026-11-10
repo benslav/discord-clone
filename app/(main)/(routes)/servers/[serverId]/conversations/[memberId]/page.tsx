@@ -25,7 +25,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
 
   if (!profile) {
     const { redirectToSignIn } = await auth();
-    return redirectToSignIn;
+    return redirectToSignIn();
   }
 
   const currentMember = await db.member.findFirst({

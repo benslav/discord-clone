@@ -11,10 +11,10 @@ import { redirect } from "next/navigation";
 import { currencyCode } from "zod";
 
 interface ChannelIdPageProps {
-  params: {
+  params: Promise<{
     serverId: string;
     channelId: string;
-  };
+  }>;
 }
 
 const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
@@ -23,7 +23,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
 
   if (!profile) {
     const { redirectToSignIn } = await auth();
-    return redirectToSignIn;
+    return redirectToSignIn();
   }
 
   const channel = await db.channel.findUnique({
